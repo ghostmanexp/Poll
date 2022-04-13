@@ -8,7 +8,10 @@ namespace Poll.Models
         public int Id { get; set; }
         [MaxLength(200)]
         public string UserName { get; set; }
-        [MaxLength(16)]
+        /// <summary>
+        /// Todo: HASH PASSWORD
+        /// </summary>
+        [MaxLength(200)]
         public string Password { get; set; }
         public int RoleId { get; set; }
     }

@@ -10,8 +10,8 @@ namespace Poll.Models
         public string Title { get; set; }
         [MaxLength(2000)]
         public string Description { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime Expires { get; set; }
+        public DateTime Created { get; set; } = DateTime.Now;
+        public DateTime Expires { get; set; } = DateTime.Now.AddDays(10);
         public int? UserId { get; set; }
     }
 }

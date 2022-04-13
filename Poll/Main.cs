@@ -3,6 +3,9 @@ using SQLite;
 
 namespace Poll
 {
+    /// <summary>
+    /// Implement DTO
+    /// </summary>
     public class Main : ControllerBase
     {
         public SQLiteAsyncConnection Connection;

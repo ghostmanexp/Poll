@@ -11,6 +11,7 @@ namespace Poll.Models
         [MaxLength(2000)]
 
         public string Response { get; set; }
+        
         public int AnsweredId { get; set; }
     }
 }

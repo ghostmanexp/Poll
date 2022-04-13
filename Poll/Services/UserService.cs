@@ -1,4 +1,5 @@
-﻿using Poll.Interfaces;
+﻿using Microsoft.AspNetCore.Identity;
+using Poll.Interfaces;
 using Poll.Models;
 
 namespace Poll.Services
@@ -18,11 +19,13 @@ namespace Poll.Services
 
         public async Task<int> AddOrUpdate(User user)
         {
+            var hashedPassword = new PasswordHasher<object?>().HashPassword(null, user.Password);
+
             var userData = new User()
             {
                 RoleId = user.RoleId,
                 UserName = user.UserName,
-                Password = user.Password,
+                Password = hashedPassword,
             };
 
             var exist = await _dbConn.Connection.Table<User>().Where(r => r.UserName == user.UserName).ToListAsync();

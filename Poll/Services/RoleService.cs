@@ -25,7 +25,12 @@ namespace Poll.Services
                 role.Id = exist[0].Id;
             }
 
-            return await _dbConn.Connection.InsertOrReplaceAsync(role);
+            var inserted = await _dbConn.Connection.InsertOrReplaceAsync(role);
+            if (inserted > 0)
+            {
+                return role.Id;
+            }
+            return 0;
         }
 
     }

@@ -2,6 +2,7 @@ using NUnit.Framework;
 using Poll;
 using Poll.Interfaces;
 using Poll.Services;
+using SQLite;
 
 namespace PollUTest
 {
