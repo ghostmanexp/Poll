@@ -56,7 +56,7 @@ namespace Poll.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (CheckValidPwd(poll.user))
+                if (App.CheckPwd.CheckValidPwd(poll.user, _userService))
                 {
                     poll.poll.UserId = poll.user.Id;
                     var result = await _pollService.AddOrUpdate(poll.poll);
@@ -70,16 +70,6 @@ namespace Poll.Controllers
             }
 
             return BadRequest();
-        }
-
-        private bool CheckValidPwd(Models.User user)
-        {
-            var hashPwd = _userService.GetAsync(user.Id).Result;
-            var passwordVerificationResult = new PasswordHasher<object?>().VerifyHashedPassword(null, hashPwd.Password, user.Password);
-            if (passwordVerificationResult == PasswordVerificationResult.Success)
-                return true;
-
-            return false;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Models.ViewModels;
 using Poll.Interfaces;
 
 namespace Poll.Controllers
@@ -50,11 +51,13 @@ namespace Poll.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Save([FromBody] Models.PollRespose pollRespose)
+        public async Task<IActionResult> Save([FromBody] PollResponseViewModel pollRespose)
         {
             if (ModelState.IsValid)
             {
-                var result = await _pollResponseService.AddOrUpdate(pollRespose);
+                pollRespose.respose.AnsweredId = pollRespose.user.Id;
+                pollRespose.respose.PollId = pollRespose.poll.Id;
+                var result = await _pollResponseService.AddOrUpdate(pollRespose.respose);
                 if (result > 0)
                     return Ok(result);
 
