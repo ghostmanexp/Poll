@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Models.ViewModels;
 using Poll.Interfaces;
 
@@ -12,12 +11,14 @@ namespace Poll.Controllers
         private readonly ILogger<PollResponseController> _logger;
         private Main _dbConn;
         private readonly IPollResponseService _pollResponseService;
+        private readonly IUserService _userService;
 
-        public PollResponseController(ILogger<PollResponseController> logger, Main dbConn, IPollResponseService pollResponseService)
+        public PollResponseController(ILogger<PollResponseController> logger, Main dbConn, IPollResponseService pollResponseService, IUserService userService)
         {
             _logger = logger;
             _dbConn = dbConn;
             _pollResponseService = pollResponseService;
+            _userService = userService;
         }
 
         [HttpGet]
@@ -55,13 +56,18 @@ namespace Poll.Controllers
         {
             if (ModelState.IsValid)
             {
-                pollRespose.respose.AnsweredId = pollRespose.user.Id;
-                pollRespose.respose.PollId = pollRespose.poll.Id;
-                var result = await _pollResponseService.AddOrUpdate(pollRespose.respose);
-                if (result > 0)
-                    return Ok(result);
+                if (App.CheckPwd.CheckValidPwd(pollRespose.user, _userService))
+                {
+                    pollRespose.respose.AnsweredId = pollRespose.user.Id;
+                    pollRespose.respose.PollId = pollRespose.poll.Id;
+                    var result = await _pollResponseService.AddOrUpdate(pollRespose.respose);
+                    if (result > 0)
+                        return Ok(result);
 
-                return BadRequest(result);
+                    return BadRequest(result);
+                }
+
+                return Unauthorized();
             }
 
             return BadRequest();

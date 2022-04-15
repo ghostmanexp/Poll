@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using Poll.Models;
-using Poll.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;

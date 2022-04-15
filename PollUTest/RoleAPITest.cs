@@ -1,20 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
-using NUnit.Framework;
-using Poll.Controllers;
-using Poll.Interfaces;
-using Poll;
-using System;
+﻿using NUnit.Framework;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
-using System.Net;
-using System.Threading;
-using Moq;
-using Moq.Protected;
 
 namespace PollUTest
 {
