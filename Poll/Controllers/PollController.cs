@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Poll.Interfaces;
+using Poll.Models;
 
 namespace Poll.Controllers
 {
@@ -41,11 +42,12 @@ namespace Poll.Controllers
             return Ok(item);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetAllFromUser(int id)
-        {
-            var item = await _pollService.GetAllFromUserAsync(id);
-            if (item == null)
+        [Route("[action]/{userId}")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllFromUser(int userId)
+{
+            var item = await _pollService.GetAllFromUserAsync(userId);
+            if (!item.Any())
                 return BadRequest("Nada foi encontrado.");
 
             return Ok(item);

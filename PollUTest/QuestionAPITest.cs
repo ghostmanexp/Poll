@@ -1,6 +1,7 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Poll.Models;
 using Poll.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 namespace PollUTest
 {
     [TestFixture]
-    public class UserAPITest
+    public class QuestionAPITest
     {
         private HttpClient _httpClient;
 
@@ -23,16 +24,17 @@ namespace PollUTest
         [Test, Order(1)]
         public async Task Insert()
         {
-            var newUser = new UserViewModel
+            var newUser = new Question
             {
-                role = new Role { Id = 0, Name = "Adm" },
-                user = new User { Id = 0, UserName = "ghostman", Password = "123", RoleId = 0 }
+                Text = "QUESTION 01",
+                QuestionType = Poll.Enums.TypesOfQuestion.QuestionTypes.SingleLineTextBox.ToString(),
+                Options = "BATATINHA;123"
             };
 
             var json = JsonSerializer.Serialize(newUser);
             var data = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var url = "http://localhost:5014/api/user/";
+            var url = "http://localhost:5014/api/question/";
             var response = await _httpClient.PostAsync(url, data);
             Assert.IsTrue(response.IsSuccessStatusCode);
 
@@ -42,29 +44,13 @@ namespace PollUTest
         [Test, Order(2)]
         public async Task GetAll()
         {
-            var response = await _httpClient.GetAsync("http://localhost:5014/api/user/");
+            var response = await _httpClient.GetAsync("http://localhost:5014/api/question/");
             Assert.True(response.IsSuccessStatusCode);
 
             var responseText = await response.Content.ReadAsStringAsync();
             Assert.IsNotEmpty(responseText);
 
-            var result = JsonSerializer.Deserialize<List<Poll.Models.User>>(responseText, new JsonSerializerOptions()
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            });
-            Assert.NotNull(result);
-        }
-
-        [Test]
-        public async Task Get()
-        {
-            var response = await _httpClient.GetAsync("http://localhost:5014/api/user/0");
-            Assert.True(response.IsSuccessStatusCode);
-
-            var responseText = await response.Content.ReadAsStringAsync();
-            Assert.IsNotEmpty(responseText);
-
-            var result = JsonSerializer.Deserialize<Poll.Models.User>(responseText, new JsonSerializerOptions()
+            var result = JsonSerializer.Deserialize<List<Poll.Models.Question>>(responseText, new JsonSerializerOptions()
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
